@@ -1,0 +1,48 @@
+[project]
+name = "fastapi-auth"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiosqlite>=0.21.0",
+    "alembic>=1.16.5",
+    "bcrypt>=4.3.0",
+    "cryptography>=46.0.1",
+    "fastapi[standard]>=0.117.1",
+    "pydantic-settings>=2.10.1",
+    "pyjwt>=2.10.1",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "sqlalchemy[asyncio]>=2.0.43",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.13.1",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = ["alembic"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "ARG001", # unused arguments in functions
+]
+ignore = [
+    "B008",  # do not perform function calls in argument defaults
+    "W191",  # indentation contains tabs
+    "B904",  # Allow raising exceptions without from e, for HTTPException
+]
+
+[tool.ruff.lint.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true
