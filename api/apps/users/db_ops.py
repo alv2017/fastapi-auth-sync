@@ -32,7 +32,7 @@ async def create_user(db_session: AsyncSession, new_user: CreateUserModel) -> db
         msg = "DB IntegrityError: User with given username or email already exists."
         raise ValueError(msg)
     except Exception as e:
-        api_logger.error(f"Unexpected Error: user creation failed: {e}")
+        api_logger.error(f"Unexpected Error: user creation in db failed: {e}")
         raise RuntimeError(f"Failed to create user: {e}")
     return user
 
