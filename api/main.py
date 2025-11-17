@@ -28,7 +28,7 @@ app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/", tags=["welcome"])
-def welcome():
+async def welcome():
     return {
         "message": "Welcome!",
     }
@@ -38,7 +38,7 @@ main_router = APIRouter(tags=["main"])
 
 
 @main_router.get("/health/", status_code=status.HTTP_200_OK)
-def health_check():
+async def health_check():
     return {
         "status": "OK",
     }
