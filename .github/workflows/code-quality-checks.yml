@@ -33,7 +33,7 @@ jobs:
           python-version-file: pyproject.toml
 
       - name: Install dependencies
-        run: uv sync --locked --dev
+        run: uv sync --dev
         shell: bash
 
       - name: Format code with Ruff
@@ -63,6 +63,6 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          uv sync --locked --dev
+          uv sync --dev
           uv run pytest tests/ -svv --cov=api --cov-report=term-missing:skip-covered --cov-report=xml --cov-fail-under 80
         shell: bash
