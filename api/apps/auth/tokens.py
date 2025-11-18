@@ -41,7 +41,9 @@ async def decode_access_token(
 ) -> db_User:
     try:
         payload = jwt.decode(
-            token, secret_key, algorithms=algorithm,
+            token,
+            secret_key,
+            algorithms=algorithm,
         )
     except ExpiredSignatureError:
         raise JWTException("Token has expired")

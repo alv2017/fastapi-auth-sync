@@ -1,4 +1,3 @@
-
 from email_validator import EmailNotValidError, validate_email
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
