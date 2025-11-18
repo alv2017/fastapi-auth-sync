@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, APIRouter, status
+from fastapi import APIRouter, FastAPI, status
 
 from .apps.auth.routes import router as auth_router
 from .apps.users.routes import router as users_router

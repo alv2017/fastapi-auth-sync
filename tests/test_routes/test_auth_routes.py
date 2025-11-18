@@ -10,7 +10,7 @@ class TestAccessTokenEndpoint:
         data = {
             "username": user_data["username"],
             "password": user_data["password"],
-            "grant_type": "password"
+            "grant_type": "password",
         }
 
         response = await ac.post(self.route, data=data)
@@ -21,8 +21,7 @@ class TestAccessTokenEndpoint:
         assert response_data["token_type"] == "Bearer"
 
     async def test_get_access_token_no_credentials(
-            self,
-            async_test_client_with_db_access_and_db_user
+        self, async_test_client_with_db_access_and_db_user
     ):
         ac = async_test_client_with_db_access_and_db_user
         data = {}
@@ -32,13 +31,12 @@ class TestAccessTokenEndpoint:
         assert response.status_code == 422
 
     async def test_get_access_token_fake_credentials(
-            self,
-            async_test_client_with_db_access_and_db_user
+        self, async_test_client_with_db_access_and_db_user
     ):
         fake_data = {
             "username": "fake-user",
             "password": "some-random-password",
-            "grant_type": "password"
+            "grant_type": "password",
         }
         ac = async_test_client_with_db_access_and_db_user
 
@@ -49,15 +47,13 @@ class TestAccessTokenEndpoint:
         assert response_data == {"detail": "Incorrect username or password"}
 
     async def test_get_access_token_invalid_password(
-            self,
-            async_test_client_with_db_access_and_db_user,
-            user_data
+        self, async_test_client_with_db_access_and_db_user, user_data
     ):
         ac = async_test_client_with_db_access_and_db_user
         data = {
             "username": user_data["username"],
             "password": "invalid-password",
-            "grant_type": "password"
+            "grant_type": "password",
         }
 
         response = await ac.post(self.route, data=data)
