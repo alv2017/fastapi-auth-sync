@@ -82,7 +82,7 @@ jobs:
           echo "RUN__MODE=TEST" >> .env
           echo "RUN__HOST=localhost" >> .env
           echo "RUN__PORT=5432" >> .env
-          echo "RUN__LOGGING=DEBUG" >> .env
+          echo "RUN__LOGGING=40" >> .env
           echo "DB__VENDOR=postgresql" >> .env
           echo "DB__IFACE=asyncpg" >> .env
           echo "DB__HOST=5432" >> .env
