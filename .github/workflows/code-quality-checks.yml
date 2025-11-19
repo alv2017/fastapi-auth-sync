@@ -48,9 +48,24 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.11"
           - "3.12"
           - "3.13"
+          - "3.14"
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: secret_and_secure_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U testuser -d testdb"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout code
@@ -60,6 +75,27 @@ jobs:
         uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
+
+      # Create a .env file used by your FastAPI settings
+      - name: Create .env for tests
+        run: |
+          echo "RUN__MODE=TEST" >> .env
+          echo "RUN__HOST=localhost" >> .env
+          echo "RUN__PORT=5432" >> .env
+          echo "RUN__LOGGING=DEBUG" >> .env
+          echo "DB__VENDOR=postgresql" >> .env
+          echo "DB__IFACE=asyncpg" >> .env
+          echo "DB__HOST=5432" >> .env
+          echo "DB__USER=test_user" >> .env
+          echo "DB__PASSWORD=secret_and_secure_password" >> .env
+          echo "DB__NAME=test_db" >> .env
+
+      - name: Wait for Postgres to start
+        run: |
+          until pg_isready -h localhost -p 5432 -U testuser; do
+            echo "Waiting for postgres..."
+            sleep 3
+          done
 
       - name: Run tests with coverage
         run: |
