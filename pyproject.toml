@@ -36,6 +36,7 @@ select = [
     "I",  # isort
     "B",  # flake8-bugbear
     "C4",  # flake8-comprehensions
+    "C901", # McCabe complexity
     "ARG001", # unused arguments in functions
 ]
 ignore = [
@@ -44,14 +45,9 @@ ignore = [
     "B904",  # Allow raising exceptions without from e, for HTTPException
 ]
 
-[tool.ruff.lint.pyupgrade]
-# Preserve types, even if a file imports `from __future__ import annotations`.
-keep-runtime-typing = true
+[tool.ruff.lint.mccabe]
+max-complexity = 10
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 pythonpath = ["."]
-
-[tool.bandit]
-exclude_dirs = ["alembic"]
-skips = ["B101", "B104"]
