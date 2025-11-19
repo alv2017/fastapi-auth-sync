@@ -34,13 +34,12 @@ jobs:
 
       - name: Install dependencies
         run: uv sync --dev
-        shell: bash
 
       - name: Format code with Ruff
-        run: uv run ruff format api/ tests/ --diff  # check formatting without applying changes
+        run: uv run ruff format api/ tests/ --check  # check formatting without applying changes
 
       - name: Lint code with Ruff
-        run: uv run ruff check api/ tests/ --diff  # check linting without applying changes
+        run: uv run ruff check api/ tests/  # check linting without applying changes
 
   run-tests:
     name: "Run Tests with Coverage"
