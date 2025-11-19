@@ -1,0 +1,104 @@
+name: Code Quality Checks
+
+on:
+  push:
+
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "api/**"
+      - "tests/**"
+
+  workflow_dispatch:  # run workflow manually
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-format:
+    name: "Lint and Format Checks"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: pyproject.toml
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Format code with Ruff
+        run: uv run ruff format api/ tests/ --check  # check formatting without applying changes
+
+      - name: Lint code with Ruff
+        run: uv run ruff check api/ tests/  # check linting without applying changes
+
+  run-tests:
+    name: "Run Tests with Coverage"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.12"
+          - "3.13"
+          - "3.14"
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: secret_and_secure_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U test_user -d test_db"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Create a .env file used by your FastAPI settings
+      - name: Create .env for tests
+        run: |
+          echo "RUN__MODE=TEST" >> .env
+          echo "RUN__HOST=localhost" >> .env
+          echo "RUN__PORT=5432" >> .env
+          echo "RUN__LOGGING=40" >> .env
+          echo "DB__VENDOR=postgresql" >> .env
+          echo "DB__IFACE=asyncpg" >> .env
+          echo "DB__HOST=localhost" >> .env
+          echo "DB__PORT=5432" >> .env
+          echo "DB__USER=test_user" >> .env
+          echo "DB__PASSWORD=secret_and_secure_password" >> .env
+          echo "DB__NAME=test_db" >> .env
+
+      - name: Wait for Postgres to start
+        run: |
+          until pg_isready -h localhost -p 5432 -U test_user; do
+            echo "Waiting for postgres..."
+            sleep 3
+          done
+
+      - name: Run tests with coverage
+        run: |
+          uv sync --dev
+          uv run pytest tests/ -svv --cov=api --cov-report=term-missing:skip-covered --cov-report=xml --cov-fail-under 80
+        shell: bash
