@@ -1,0 +1,16 @@
+.coverage
+coverage.xml
+.dockerignore
+.env.*
+!.env.docker
+.git
+.gitignore
+.github
+.idea
+.pytest_cache
+.ruff_cache
+.venv
+__pycache__
+docker/
+!docker/local/entrypoint.sh
+logs/api.log*
