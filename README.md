@@ -8,7 +8,7 @@ FastAPI application with a synchronous hashing function used for authentication.
 uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-# 2. Running the Application Locally with Docker
+## 2. Running the Application Locally with Docker
 
 ```bash
 docker compose -f docker/local/docker-compose.yml up --build
