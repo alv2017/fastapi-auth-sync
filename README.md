@@ -21,7 +21,7 @@ docker compose -f docker/local/docker-compose.yml build
 docker compose -f docker/local/docker-compose.yml up
 ```
 
-Stopping the application:
+stopping the application:
 
 ```bash
 docker compose -f docker/local/docker-compose.yml down
