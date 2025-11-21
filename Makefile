@@ -17,11 +17,11 @@ format:  ## Format the code.
 
 .PHONY: test
 test:  ## Test your code locally
-	@echo "--> Starting docker container with test database"
-	docker compose -f docker/db-test/docker-compose.yml up --build -d
-
 	@echo "--> Copying .env.test to .env"
 	cp .env.test .env
+
+	@echo "--> Starting docker container with test database"
+	docker compose -f docker/db-test/docker-compose.yml up --build -d
 
 	@echo "--> Running tests"
 	uv run pytest tests/ -svv --cov=api --cov-report=term-missing:skip-covered --cov-report=xml --cov-fail-under 80
@@ -35,14 +35,14 @@ test:  ## Test your code locally
 
 .PHONY: run-dev
 run-dev:  ## Run application locally with development database
+	@echo "--> Copying .env.dev to .env"
+	cp .env.dev .env
+
 	@echo "--> Starting docker container with development database"
 	docker compose -f docker/db/docker-compose.yml up --build -d
 
 	@echo "--> Waiting for database to be ready"
 	sleep 5
-
-	@echo "--> Copying .env.dev to .env"
-	cp .env.dev .env
 
 	@echo "--> Applying database migrations"
 	uv run alembic upgrade head
