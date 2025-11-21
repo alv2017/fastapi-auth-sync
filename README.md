@@ -19,3 +19,10 @@ or you can first build the image and then run the container:
 ```bash
 docker compose -f docker/local/docker-compose.yml build
 docker compose -f docker/local/docker-compose.yml up
+```
+
+Stopping the application:
+
+```bash
+docker compose -f docker/local/docker-compose.yml down
+```
