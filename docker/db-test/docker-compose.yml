@@ -1,0 +1,17 @@
+
+services:
+  testdb:
+    image: postgres:16
+    container_name: testdb
+    restart: always
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - auth_app_test_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=t0PS3cret
+      - POSTGRES_USER=auth_app_test_user
+      - POSTGRES_DB=auth_app_test_db
+
+volumes:
+    auth_app_test_db_data:

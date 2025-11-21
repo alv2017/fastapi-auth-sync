@@ -16,6 +16,50 @@ format:  ## Format the code.
 
 
 .PHONY: test
-test:  ## Test your code.
-	@echo "Run Pytest Tests"
+test:  ## Test your code locally
+	@echo "--> Copying .env.test to .env"
+	cp .env.test .env
+
+	@echo "--> Starting docker container with test database"
+	docker compose -f docker/db-test/docker-compose.yml up --build -d
+
+	@echo "--> Running tests"
 	uv run pytest tests/ -svv --cov=api --cov-report=term-missing:skip-covered --cov-report=xml --cov-fail-under 80
+
+	@echo "--> Stopping docker container with test database"
+	docker compose -f docker/db-test/docker-compose.yml down
+
+	@echo "--> Restoring .env file"
+	rm .env
+
+
+.PHONY: run-dev
+run-dev:  ## Run application locally with development database
+	@echo "--> Copying .env.dev to .env"
+	cp .env.dev .env
+
+	@echo "--> Starting docker container with development database"
+	docker compose -f docker/db/docker-compose.yml up --build -d
+
+	@echo "--> Waiting for database to be ready"
+	sleep 5
+
+	@echo "--> Applying database migrations"
+	uv run alembic upgrade head
+
+	@echo "--> Running application"
+	uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
+
+
+.PHONY: stop-dev
+stop-dev:  ##
+	@echo "--> Stopping Uvicorn server"
+	- pkill -f "uvicorn api.main:app" || true
+
+	@echo "--> Stopping development database container"
+	docker compose -f docker/db/docker-compose.yml down
+
+	@echo "--> Cleaning up .env"
+	- rm .env || true
+
+	@echo "--> Development environment stopped"
