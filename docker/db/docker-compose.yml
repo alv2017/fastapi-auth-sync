@@ -1,0 +1,17 @@
+
+services:
+  pgdb:
+    image: postgres:16
+    container_name: pgdb
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - auth_app_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=t0PS3cret
+      - POSTGRES_USER=auth_app_user
+      - POSTGRES_DB=auth_app_db
+
+volumes:
+    auth_app_db_data:
