@@ -50,7 +50,7 @@ docker compose -f docker/db/docker-compose.yml build
 docker compose -f docker/db/docker-compose.yml up
 ```
 
-stopping the development database server:
+stop the development database server:
 
 ```bash
 docker compose -f docker/db/docker-compose.yml down
@@ -73,7 +73,7 @@ docker compose -f docker/db-test/docker-compose.yml build
 docker compose -f docker/db-test/docker-compose.yml up
 ```
 
-stopping the test database server:
+stop the test database server:
 
 ```bash
 docker compose -f docker/db-test/docker-compose.yml down
