@@ -37,6 +37,3 @@ async def authenticate_user(
         raise AuthenticationError(f"Invalid credentials for user: {username_or_email}")
 
     return user
-
-
-# Function to reverse an integer: example: 123 -> 321
