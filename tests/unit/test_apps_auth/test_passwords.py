@@ -1,9 +1,7 @@
 import pytest
 
-from api.apps.auth.passwords import (
-    hash_password,
-    verify_password
-)
+from api.apps.auth.passwords import hash_password, verify_password
+
 
 class TestPasswordHashing:
     def test_hash_password(self):
