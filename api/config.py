@@ -62,7 +62,7 @@ class DBConfig(BaseModel):
             password=self.password or None,
             host=self.host or None,
             port=int(self.port) if self.port else None,
-            database=self.name or None
+            database=self.name or None,
         )
 
 
