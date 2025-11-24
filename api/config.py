@@ -1,5 +1,4 @@
 import logging
-import os
 from enum import Enum
 from pathlib import Path
 
@@ -10,22 +9,21 @@ from sqlalchemy import URL
 
 ROOT_DIRECTORY = Path(__file__).parent.parent
 ENV = ROOT_DIRECTORY / ".env"
-ENV_TEMPLATE = ROOT_DIRECTORY / ".env.template"
 API_LOG_FILE_LOCATION = ROOT_DIRECTORY / "logs" / "api.log"
 
 
 class RunMode(str, Enum):
-    DEV: str = "DEV"
-    PROD: str = "PROD"
-    TEST: str = "TEST"
+    DEV = "DEV"
+    PROD = "PROD"
+    TEST = "TEST"
 
 
 class LoggingMode(Enum):
-    CRITICAL: int = logging.CRITICAL
-    ERROR: int = logging.ERROR
-    WARNING: int = logging.WARNING
-    INFO: int = logging.INFO
-    DEBUG: int = logging.DEBUG
+    CRITICAL = logging.CRITICAL
+    ERROR = logging.ERROR
+    WARNING = logging.WARNING
+    INFO = logging.INFO
+    DEBUG = logging.DEBUG
 
 
 class RunConfig(BaseModel):
@@ -37,19 +35,19 @@ class RunConfig(BaseModel):
 
 
 class AccessTokenConfig(BaseModel):
-    secret_key: str = "ChangeMe-Secret-Key-2025"
+    secret_key: str
     algorithm: str = "HS256"
     expire_minutes: int = 30
 
 
 class DBConfig(BaseModel):
-    vendor: str = "sqlite"
-    iface: str = "aiosqlite"
-    host: str = ""
-    port: str = ""
-    user: str = ""
-    name: str = os.path.join(ROOT_DIRECTORY, "sqlite", "db.sqlite")
-    password: str = ""
+    vendor: str
+    iface: str
+    host: str
+    port: str
+    user: str
+    name: str
+    password: str
     echo: bool = False
     echo_pool: bool = False
     pool_size: int = 5
@@ -64,10 +62,7 @@ class DBConfig(BaseModel):
             password=self.password or None,
             host=self.host or None,
             port=int(self.port) if self.port else None,
-            database=self.name or None,
-            query={
-                "prepared_statement_cache_size": str(self.prepared_statement_cache_size)
-            },
+            database=self.name or None
         )
 
 
@@ -78,7 +73,7 @@ class Settings(BaseSettings):
     access_token: AccessTokenConfig = AccessTokenConfig()
 
     model_config = SettingsConfigDict(
-        env_file=(ENV_TEMPLATE, ENV), case_sensitive=False, env_nested_delimiter="__"
+        env_file=ENV, case_sensitive=False, env_nested_delimiter="__"
     )
 
 
