@@ -82,6 +82,7 @@ jobs:
           echo "RUN__HOST=localhost" >> .env
           echo "RUN__PORT=5432" >> .env
           echo "RUN__LOGGING=40" >> .env
+          echo "ACCESS_TOKEN__SECRET_KEY=fake-secret-key-used-for-testing" >> .env
           echo "DB__VENDOR=postgresql" >> .env
           echo "DB__IFACE=asyncpg" >> .env
           echo "DB__HOST=localhost" >> .env
