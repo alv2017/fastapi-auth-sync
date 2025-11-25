@@ -29,7 +29,7 @@ class LoggingMode(Enum):
 class RunConfig(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
-    logging: int = LoggingMode.ERROR
+    logging: int = LoggingMode.ERROR.value
     reload: bool = True
     mode: str = RunMode.PROD.value
 
@@ -68,15 +68,15 @@ class DBConfig(BaseModel):
 
 class Settings(BaseSettings):
     api_prefix: str = "/api"
-    run: RunConfig = RunConfig()
-    db: DBConfig = DBConfig()
-    access_token: AccessTokenConfig = AccessTokenConfig()
+    run: RunConfig
+    db: DBConfig
+    access_token: AccessTokenConfig
 
     model_config = SettingsConfigDict(
         env_file=ENV, case_sensitive=False, env_nested_delimiter="__"
     )
 
-
 settings = Settings()
+
 
 oauth2_scheme: OAuth2PasswordBearer = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
