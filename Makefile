@@ -63,3 +63,21 @@ stop-dev:  ##
 	- rm .env || true
 
 	@echo "--> Development environment stopped"
+
+
+.PHONY: start-db
+start-db:  ##
+	@echo "--> Starting PostgreSQL database container"
+	docker compose -f docker/db/docker-compose.yml up --build -d
+
+	@echo "--> Waiting for database to be ready"
+	sleep 5
+
+	@echo "--> Applying database migrations"
+	uv run alembic upgrade head
+
+
+.PHONY: stop-db
+stop-db:  ##
+	@echo "--> Stopping PostgreSQL database container"
+	docker compose -f docker/db/docker-compose.yml down
