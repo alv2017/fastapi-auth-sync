@@ -1,6 +1,6 @@
 import uvicorn
 
-from .config import settings
+from api.config import settings
 
 if __name__ == "__main__":
     host = settings.run.host
